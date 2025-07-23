@@ -1,0 +1,29 @@
+<!-- templates/pages/home.html -->
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Vitaly's Portfolio" %}</title>
+</head>
+<body>
+    <h1>{% trans "Welcome to my portfolio!" %}</h1>
+
+    <!-- Переключатель языков -->
+    <div style="margin: 20px 0;">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% for lang_code, lang_name in LANGUAGES %}
+            <a href="/{{ lang_code }}{% url 'pages:home' %}"
+               style="margin-right: 10px;"
+               {% if lang_code == LANGUAGE_CODE %}style="font-weight: bold;"{% endif %}>
+                {{ lang_name }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <p><a href="{% url 'pages:about' %}">{% trans "About Me" %}</a></p>
+    <p><a href="{% url 'pages:contact' %}">{% trans "Contact" %}</a></p>
+    <p><a href="{% url 'pages:resume' %}">{% trans "Resume" %}</a></p>
+</body>
+</html>

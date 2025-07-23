@@ -1,0 +1,16 @@
+portfolio/
+├── portfolio/                # Настройки проекта
+├── pages/                    # Статические страницы (о себе, навыки, сопроводительное письмо)
+├── projects/                 # Проекты
+├── certifications/           # Сертификаты
+├── contact/                  # Форма обратной связи
+├── blog/                     # Блог
+├── api/                      # API (DRF)
+├── media/                    # Загружаемые файлы
+├── static/                   # Статические файлы
+├── templates/                # Шаблоны
+├── locale/                   # Переводы
+├── Dockerfile
+├── .gitignore
+├── manage.py
+└── README.md
