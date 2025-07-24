@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Third-party
     'rest_framework',
     'corsheaders',
+    'django_filters',
 
     # Apps
     'pages',
@@ -174,6 +175,34 @@ REST_FRAMEWORK = {
 # Настройка CORS
 # -----------------------------
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "http://localhost:3000",      # Next.js
+    "http://127.0.0.1:3000",     # Next.js альтернативный
+    "http://localhost:5173",      # Vite (если понадобится)
+    "http://127.0.0.1:5173",     # Vite альтернативный
+]
+
+# Для разработки можно разрешить все origins (НЕ для продакшена!)
+CORS_ALLOW_ALL_ORIGINS = True
+
+# Разрешенные заголовки
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Разрешенные методы
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
 ]
