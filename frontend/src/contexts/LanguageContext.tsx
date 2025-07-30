@@ -1,419 +1,353 @@
+// src/contexts/LanguageContext.tsx
+"use client"
 
-'use client';
-
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-// Встроенные переводы
-const translations = {
-  en: {
-    nav: {
-      home: 'Home',
-      about: 'About',
-      projects: 'Projects',
-      certificates: 'Certificates',
-      contact: 'Contact'
-    },
-    home: {
-      hero: {
-        title: 'Fullstack Developer',
-        subtitle: 'Passionate about creating amazing web applications',
-        github: 'GitHub',
-        linkedin: 'LinkedIn'
-      },
-      skills: {
-        title: 'Technical Skills',
-        subtitle: 'Technologies I work with',
-        category: 'Category',
-        experience: 'Experience',
-        years: 'years'
-      },
-      explore: {
-        title: 'Explore My Work',
-        subtitle: 'Discover more about my experience and projects',
-        projects: {
-          title: 'Projects',
-          description: 'Check out my latest web applications and development work',
-          link: 'View Projects'
-        },
-        certificates: {
-          title: 'Certificates',
-          description: 'My professional certifications and educational achievements',
-          link: 'View Certificates'
-        },
-        about: {
-          title: 'About Me',
-          description: 'Learn more about my background, experience, and journey',
-          link: 'Learn More'
-        }
-      },
-      contact: {
-        title: 'Ready to Work Together?',
-        subtitle: 'I am always open to discussing new opportunities and interesting projects',
-        email: 'Email',
-        location: 'Location',
-        button: 'Get In Touch'
-      }
-    },
-    projects: {
-      title: 'My Projects',
-      subtitle: 'A collection of my recent work and side projects',
-      noProjects: 'No projects found. Add some projects in Django admin!',
-      liveDemo: 'Live Demo',
-      github: 'GitHub',
-      technologies: 'Technologies Used',
-      featured: 'Featured',
-      stats: {
-        totalProjects: 'Total Projects',
-        featuredProjects: 'Featured Projects',
-        technologiesUsed: 'Technologies Used'
-      }
-    },
-    certificates: {
-      title: 'Certificates & Education',
-      subtitle: 'My professional certifications and educational achievements',
-      noCertificates: 'No certificates found. Add some certificates in Django admin!',
-      certified: 'Certified',
-      issued: 'Issued',
-      viewCertificate: 'View Certificate',
-      stats: {
-        certificates: 'Certificates Earned',
-        courses: 'Courses Completed',
-        years: 'Years Learning'
-      }
-    },
-    about: {
-      title: 'About Me',
-      subtitle: 'Get to know me better',
-      aboutMeTitle: 'About Me',
-      bio: 'Experienced production manager transitioning to software development. Completed comprehensive training in Python/Django and React. Seeking opportunities to combine technical skills with proven leadership experience.',
-      experience: 'Experience',
-      education: 'Education',
-      interests: 'Interests',
-      technicalSkills: 'Technical Skills',
-      getInTouch: 'Get In Touch',
-      connectWithMe: 'Connect With Me',
-      responseTime: 'Response Time',
-      responseTimeDesc: 'Usually within 24 hours',
-      workingHours: 'Monday - Friday, 9 AM - 6 PM (GMT+3)',
-      availableRemote: 'Available for remote work worldwide',
-      sendEmail: 'Send Email',
-      fullstackDev: 'Fullstack Developer',
-      managementExp: 'Management Experience',
-      skillFactoryDesc: 'Comprehensive training in modern web development technologies',
-      stepikDesc: 'Continuous learning in Python, JavaScript, and web technologies',
-      devExperience: 'Developing web applications using Django, React, and modern technologies. Focus on creating scalable and maintainable solutions.',
-      managementDesc: 'Extensive management background providing leadership and strategic thinking skills that enhance technical project management.'
-    },
-    contact: {
-      title: 'Get In Touch',
-      subtitle: 'Let\'s discuss your next project',
-      form: {
-        name: 'Your Name',
-        email: 'Your Email',
-        subject: 'Subject',
-        message: 'Message',
-        send: 'Send Message',
-        sending: 'Sending...'
-      }
-    },
-    common: {
-      loading: 'Loading...',
-      error: 'Something went wrong',
-      notFound: 'Not found',
-      created: 'Created'
-    }
-  },
-  ru: {
-    nav: {
-      home: 'Главная',
-      about: 'Обо мне',
-      projects: 'Проекты',
-      certificates: 'Сертификаты',
-      contact: 'Контакты'
-    },
-    home: {
-      hero: {
-        title: 'Fullstack Разработчик',
-        subtitle: 'Увлечен созданием потрясающих веб-приложений',
-        github: 'GitHub',
-        linkedin: 'LinkedIn'
-      },
-      skills: {
-        title: 'Технические Навыки',
-        subtitle: 'Технологии, с которыми я работаю',
-        category: 'Категория',
-        experience: 'Опыт',
-        years: 'лет'
-      },
-      explore: {
-        title: 'Изучите Мою Работу',
-        subtitle: 'Узнайте больше о моем опыте и проектах',
-        projects: {
-          title: 'Проекты',
-          description: 'Посмотрите мои последние веб-приложения и разработки',
-          link: 'Смотреть Проекты'
-        },
-        certificates: {
-          title: 'Сертификаты',
-          description: 'Мои профессиональные сертификаты и образовательные достижения',
-          link: 'Смотреть Сертификаты'
-        },
-        about: {
-          title: 'Обо Мне',
-          description: 'Узнайте больше о моем опыте, образовании и пути развития',
-          link: 'Узнать Больше'
-        }
-      },
-      contact: {
-        title: 'Готовы Работать Вместе?',
-        subtitle: 'Я всегда открыт для обсуждения новых возможностей и интересных проектов',
-        email: 'Email',
-        location: 'Местоположение',
-        button: 'Связаться'
-      }
-    },
-    projects: {
-      title: 'Мои Проекты',
-      subtitle: 'Коллекция моих последних работ и побочных проектов',
-      noProjects: 'Проекты не найдены. Добавьте проекты в Django админке!',
-      liveDemo: 'Демо',
-      github: 'GitHub',
-      technologies: 'Используемые Технологии',
-      featured: 'Рекомендуемый',
-      stats: {
-        totalProjects: 'Всего Проектов',
-        featuredProjects: 'Избранные Проекты',
-        technologiesUsed: 'Использованные Технологии'
-      }
-    },
-    certificates: {
-      title: 'Сертификаты и Образование',
-      subtitle: 'Мои профессиональные сертификаты и образовательные достижения',
-      noCertificates: 'Сертификаты не найдены. Добавьте сертификаты в Django админке!',
-      certified: 'Сертифицирован',
-      issued: 'Выдан',
-      viewCertificate: 'Посмотреть Сертификат',
-      stats: {
-        certificates: 'Получено Сертификатов',
-        courses: 'Пройдено Курсов',
-        years: 'Лет Обучения'
-      }
-    },
-    about: {
-      title: 'Обо Мне',
-      subtitle: 'Узнайте меня лучше',
-      aboutMeTitle: 'Обо Мне',
-      bio: 'Опытный менеджер производства, переходящий в разработку программного обеспечения. Прошел комплексное обучение по Python/Django и React. Ищу возможности объединить технические навыки с проверенным опытом руководства.',
-      experience: 'Опыт',
-      education: 'Образование',
-      interests: 'Интересы',
-      technicalSkills: 'Технические Навыки',
-      getInTouch: 'Связаться',
-      connectWithMe: 'Связаться со Мной',
-      responseTime: 'Время Ответа',
-      responseTimeDesc: 'Обычно в течение 24 часов',
-      workingHours: 'Понедельник - Пятница, 9:00 - 18:00 (GMT+3)',
-      availableRemote: 'Доступен для удаленной работы по всему миру',
-      sendEmail: 'Отправить Email',
-      fullstackDev: 'Fullstack Разработчик',
-      managementExp: 'Управленческий Опыт',
-      skillFactoryDesc: 'Комплексное обучение современным технологиям веб-разработки',
-      stepikDesc: 'Непрерывное изучение Python, JavaScript и веб-технологий',
-      devExperience: 'Разработка веб-приложений с использованием Django, React и современных технологий. Фокус на создании масштабируемых и поддерживаемых решений.',
-      managementDesc: 'Обширный управленческий опыт, обеспечивающий лидерские качества и стратегическое мышление, которые улучшают управление техническими проектами.'
-    },
-    contact: {
-      title: 'Связаться',
-      subtitle: 'Давайте обсудим ваш следующий проект',
-      form: {
-        name: 'Ваше Имя',
-        email: 'Ваш Email',
-        subject: 'Тема',
-        message: 'Сообщение',
-        send: 'Отправить',
-        sending: 'Отправка...'
-      }
-    },
-    common: {
-      loading: 'Загрузка...',
-      error: 'Что-то пошло не так',
-      notFound: 'Не найдено',
-      created: 'Создано'
-    }
-  },
-  he: {
-    nav: {
-      home: 'בית',
-      about: 'אודות',
-      projects: 'פרויקטים',
-      certificates: 'תעודות',
-      contact: 'צור קשר'
-    },
-    home: {
-      hero: {
-        title: 'מפתח Fullstack',
-        subtitle: 'נלהב ליצור אפליקציות אינטרנט מדהימות',
-        github: 'GitHub',
-        linkedin: 'LinkedIn'
-      },
-      skills: {
-        title: 'כישורים טכניים',
-        subtitle: 'טכנולוגיות שאני עובד איתן',
-        category: 'קטגוריה',
-        experience: 'ניסיון',
-        years: 'שנים'
-      },
-      explore: {
-        title: 'חקור את העבודה שלי',
-        subtitle: 'גלה עוד על הניסיון והפרויקטים שלי',
-        projects: {
-          title: 'פרויקטים',
-          description: 'בדוק את אפליקציות האינטרנט והפיתוחים האחרונים שלי',
-          link: 'צפה בפרויקטים'
-        },
-        certificates: {
-          title: 'תעודות',
-          description: 'התעודות המקצועיות וההישגים החינוכיים שלי',
-          link: 'צפה בתעודות'
-        },
-        about: {
-          title: 'אודותיי',
-          description: 'למד עוד על הרקע, הניסיון והמסע שלי',
-          link: 'למד עוד'
-        }
-      },
-      contact: {
-        title: 'מוכן לעבוד יחד?',
-        subtitle: 'אני תמיד פתוח לדיון על הזדמנויות חדשות ופרויקטים מעניינים',
-        email: 'אימייל',
-        location: 'מיקום',
-        button: 'צור קשר'
-      }
-    },
-    projects: {
-      title: 'הפרויקטים שלי',
-      subtitle: 'אוסף של העבודות האחרונות והפרויקטים הצדדיים שלי',
-      noProjects: 'לא נמצאו פרויקטים. הוסף פרויקטים בממשק הניהול של Django!',
-      liveDemo: 'דמו חי',
-      github: 'GitHub',
-      technologies: 'טכנולוגיות בשימוש',
-      featured: 'מומלץ',
-      stats: {
-        totalProjects: 'סך הכל פרויקטים',
-        featuredProjects: 'פרויקטים מומלצים',
-        technologiesUsed: 'טכנולוגיות בשימוש'
-      }
-    },
-    certificates: {
-      title: 'תעודות וחינוך',
-      subtitle: 'התעודות המקצועיות וההישגים החינוכיים שלי',
-      noCertificates: 'לא נמצאו תעודות. הוסף תעודות בממשק הניהול של Django!',
-      certified: 'מוסמך',
-      issued: 'הונפק',
-      viewCertificate: 'צפה בתעודה',
-      stats: {
-        certificates: 'תעודות שהושגו',
-        courses: 'קורסים שהושלמו',
-        years: 'שנות למידה'
-      }
-    },
-    about: {
-      title: 'אודותיי',
-      subtitle: 'הכר אותי טוב יותר',
-      aboutMeTitle: 'אודותיי',
-      bio: 'מנהל ייצור מנוסה העובר לפיתוח תוכנה. השלמתי הכשרה מקיפה ב-Python/Django ו-React. מחפש הזדמנויות לשלב כישורים טכניים עם ניסיון הנהגה מוכח.',
-      experience: 'ניסיון',
-      education: 'חינוך',
-      interests: 'תחומי עניין',
-      technicalSkills: 'כישורים טכניים',
-      getInTouch: 'צור קשר',
-      connectWithMe: 'התחבר אליי',
-      responseTime: 'זמן תגובה',
-      responseTimeDesc: 'בדרך כלל תוך 24 שעות',
-      workingHours: 'ראשון - חמישי, 9:00 - 18:00 (GMT+3)',
-      availableRemote: 'זמין לעבודה מרחוק ברחבי העולם',
-      sendEmail: 'שלח אימייל',
-      fullstackDev: 'מפתח Fullstack',
-      managementExp: 'ניסיון ניהולי',
-      skillFactoryDesc: 'הכשרה מקיפה בטכנולוגיות פיתוח אינטרנט מודרניות',
-      stepikDesc: 'למידה מתמשכת ב-Python, JavaScript וטכנולוגיות אינטרנט',
-      devExperience: 'פיתוח אפליקציות אינטרנט באמצעות Django, React וטכנולוגיות מודרניות. התמקדות ביצירת פתרונות ניתנים להרחבה ותחזוקה.',
-      managementDesc: 'רקע ניהולי נרחב המספק כישורי מנהיגות וחשיבה אסטרטגית המשפרים את ניהול פרויקטים טכניים.'
-    },
-    contact: {
-      title: 'צור קשר',
-      subtitle: 'בואו נדבר על הפרויקט הבא שלך',
-      form: {
-        name: 'השם שלך',
-        email: 'האימייל שלך',
-        subject: 'נושא',
-        message: 'הודעה',
-        send: 'שלח הודעה',
-        sending: 'שולח...'
-      }
-    },
-    common: {
-      loading: 'טוען...',
-      error: 'משהו השתבש',
-      notFound: 'לא נמצא',
-      created: 'נוצר'
-    }
-  }
-};
-
-// Встроенные языки
-export const languages = {
-  en: { name: 'English', flag: '🇺🇸' },
-  ru: { name: 'Русский', flag: '🇷🇺' },
-  he: { name: 'עברית', flag: '🇮🇱' }
-} as const;
-
-export type Language = keyof typeof languages;
-type TranslationKeys = typeof translations.en;
+import type React from "react"
+import { createContext, useContext, useState } from "react"
 
 interface LanguageContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: TranslationKeys;
-  isRTL: boolean;
+  language: string
+  setLanguage: (language: string) => void
+  t: any
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>('en');
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguage] = useState("en")
 
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && translations[savedLanguage]) {
-      setLanguage(savedLanguage);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('language', language);
-    document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
-    document.documentElement.lang = language;
-  }, [language]);
-
-  const value: LanguageContextType = {
-    language,
-    setLanguage,
-    t: translations[language],
-    isRTL: language === 'he'
-  };
-
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
-  );
-}
-
-export function useLanguage() {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+  const translations = {
+    en: {
+      common: {
+        loading: "Loading...",
+        error: "Error loading data",
+      },
+      nav: {
+        home: "Home",
+        about: "About", 
+        projects: "Projects",
+        certificates: "Certificates",
+        contact: "Contact",
+      },
+      home: {
+        hero: {
+          title: "Full Stack Developer",
+          subtitle: "Passionate about creating innovative web solutions with modern technologies",
+          github: "GitHub",
+          linkedin: "LinkedIn",
+        },
+        skills: {
+          title: "Technical Skills",
+          subtitle: "Technologies I work with to bring ideas to life",
+          experience: "Experience",
+          years: "years",
+        },
+        explore: {
+          title: "Explore My Work",
+          subtitle: "Discover my projects, certifications, and professional journey",
+          projects: {
+            title: "Projects",
+            description: "Explore my latest web development projects and applications",
+            link: "View Projects",
+          },
+          certificates: {
+            title: "Certificates", 
+            description: "Professional certifications and completed courses",
+            link: "View Certificates",
+          },
+          about: {
+            title: "About Me",
+            description: "Learn more about my background and experience", 
+            link: "Learn More",
+          },
+        },
+        contact: {
+          title: "Ready to Work Together?",
+          subtitle: "Let's discuss your next project",
+          email: "Email",
+          location: "Location",
+          button: "Get In Touch",
+        },
+      },
+      about: {
+        title: "About Me",
+        subtitle: "Get to know me better",
+        connectWithMe: "Connect With Me",
+        aboutMeTitle: "About Me",
+        bio: "I'm a passionate Full Stack Developer with expertise in modern web technologies.",
+        experience: "Professional Experience",
+        fullstackDev: "Full Stack Developer", 
+        devExperience: "Developing modern web applications using React, Django, and other cutting-edge technologies.",
+        managementExp: "Management Experience",
+        managementDesc: "Extensive experience in team leadership and project management.",
+        education: "Education & Learning",
+        skillFactoryDesc: "Comprehensive full-stack development program covering modern web technologies.",
+        stepikDesc: "Continuous learning through various programming courses and certifications.",
+        technicalSkills: "Technical Skills Overview",
+      },
+      projects: {
+        title: "My Projects",
+        subtitle: "A showcase of my recent work and applications",
+        viewProject: "View Project",
+        viewCode: "View Code", 
+        technologies: "Technologies",
+        noProjects: "Projects will be displayed here once added.",
+        stats: {
+          totalProjects: "Total Projects",
+          technologies: "Technologies Used",
+          completedProjects: "Completed Projects"
+        }
+      },
+      certificates: {
+        title: "Certificates & Achievements",
+        subtitle: "My professional certifications and completed courses",
+        issuer: "Issued by",
+        date: "Date",
+        viewCertificate: "View Certificate",
+        noCertificates: "Certificates will be displayed here once added.",
+        stats: {
+          certificates: "Total Certificates",
+          courses: "Courses Completed",
+          skills: "Skills Acquired"
+        }
+      },
+      contact: {
+        title: "Get In Touch",
+        subtitle: "Have a project in mind? Let's work together to create something amazing.",
+        form: {
+          name: "Full Name",
+          email: "Email Address", 
+          subject: "Subject",
+          message: "Message",
+          send: "Send Message",
+          sending: "Sending...",
+        },
+      },
+    },
+    ru: {
+      common: {
+        loading: "Загрузка...",
+        error: "Ошибка загрузки данных",
+      },
+      nav: {
+        home: "Главная",
+        about: "Обо мне",
+        projects: "Проекты", 
+        certificates: "Сертификаты",
+        contact: "Контакты",
+      },
+      home: {
+        hero: {
+          title: "Full Stack Разработчик",
+          subtitle: "Увлечен созданием инновационных веб-решений с использованием современных технологий",
+          github: "GitHub",
+          linkedin: "LinkedIn",
+        },
+        skills: {
+          title: "Технические Навыки",
+          subtitle: "Технологии, с которыми я работаю для воплощения идей в жизнь",
+          experience: "Опыт",
+          years: "лет",
+        },
+        explore: {
+          title: "Изучите Мою Работу",
+          subtitle: "Откройте для себя мои проекты, сертификаты и профессиональный путь",
+          projects: {
+            title: "Проекты",
+            description: "Изучите мои последние проекты веб-разработки и приложения",
+            link: "Посмотреть Проекты",
+          },
+          certificates: {
+            title: "Сертификаты",
+            description: "Профессиональные сертификаты и пройденные курсы", 
+            link: "Посмотреть Сертификаты",
+          },
+          about: {
+            title: "Обо Мне",
+            description: "Узнайте больше о моем опыте и образовании",
+            link: "Узнать Больше",
+          },
+        },
+        contact: {
+          title: "Готовы Работать Вместе?",
+          subtitle: "Давайте обсудим ваш следующий проект",
+          email: "Email",
+          location: "Местоположение",
+          button: "Связаться",
+        },
+      },
+      about: {
+        title: "Обо Мне",
+        subtitle: "Узнайте меня лучше",
+        connectWithMe: "Связаться со Мной",
+        aboutMeTitle: "Обо Мне", 
+        bio: "Я увлеченный Full Stack разработчик с экспертизой в современных веб-технологиях.",
+        experience: "Профессиональный Опыт",
+        fullstackDev: "Full Stack Разработчик",
+        devExperience: "Разработка современных веб-приложений с использованием React, Django и других передовых технологий.",
+        managementExp: "Управленческий Опыт",
+        managementDesc: "Обширный опыт руководства командой и управления проектами в различных отраслях.",
+        education: "Образование и Обучение",
+        skillFactoryDesc: "Комплексная программа full-stack разработки, охватывающая современные веб-технологии.",
+        stepikDesc: "Непрерывное обучение через различные курсы программирования и сертификации.",
+        technicalSkills: "Обзор Технических Навыков",
+      },
+      projects: {
+        title: "Мои Проекты",
+        subtitle: "Витрина моих последних работ и приложений",
+        viewProject: "Посмотреть Проект",
+        viewCode: "Посмотреть Код",
+        technologies: "Технологии",
+        noProjects: "Проекты будут отображены здесь после добавления.",
+        stats: {
+          totalProjects: "Всего Проектов",
+          technologies: "Использованных Технологий",
+          completedProjects: "Завершенных Проектов"
+        }
+      },
+      certificates: {
+        title: "Сертификаты и Достижения",
+        subtitle: "Мои профессиональные сертификаты и пройденные курсы",
+        issuer: "Выдан",
+        date: "Дата",
+        viewCertificate: "Посмотреть Сертификат",
+        noCertificates: "Сертификаты будут отображены здесь после добавления.",
+        stats: {
+          certificates: "Всего Сертификатов",
+          courses: "Пройденных Курсов",
+          skills: "Освоенных Навыков"
+        }
+      },
+      contact: {
+        title: "Свяжитесь со Мной",
+        subtitle: "Есть проект? Давайте работать вместе, чтобы создать что-то удивительное.",
+        form: {
+          name: "Полное Имя",
+          email: "Email Адрес",
+          subject: "Тема", 
+          message: "Сообщение",
+          send: "Отправить Сообщение",
+          sending: "Отправка...",
+        },
+      },
+    },
+    he: {
+      common: {
+        loading: "טוען...",
+        error: "שגיאה בטעינת הנתונים",
+      },
+      nav: {
+        home: "בית",
+        about: "אודות",
+        projects: "פרויקטים",
+        certificates: "תעודות",
+        contact: "צור קשר",
+      },
+      home: {
+        hero: {
+          title: "מפתח Full Stack",
+          subtitle: "נלהב ליצור פתרונות אינטרנט חדשניים עם טכנולוגיות מודרניות",
+          github: "GitHub",
+          linkedin: "LinkedIn",
+        },
+        skills: {
+          title: "כישורים טכניים",
+          subtitle: "טכנולוגיות שאני עובד איתן כדי להביא רעיונות לחיים",
+          experience: "ניסיון",
+          years: "שנים",
+        },
+        explore: {
+          title: "גלה את העבודה שלי",
+          subtitle: "גלה את הפרויקטים, התעודות והמסע המקצועי שלי",
+          projects: {
+            title: "פרויקטים",
+            description: "גלה את פרויקטי פיתוח האינטרנט והאפליקציות האחרונים שלי",
+            link: "צפה בפרויקטים",
+          },
+          certificates: {
+            title: "תעודות",
+            description: "תעודות מקצועיות וקורסים שהושלמו",
+            link: "צפה בתעודות",
+          },
+          about: {
+            title: "אודותיי",
+            description: "למד עוד על הרקע והניסיון שלי",
+            link: "למד עוד",
+          },
+        },
+        contact: {
+          title: "מוכן לעבוד יחד?",
+          subtitle: "בואו נדון בפרויקט הבא שלך",
+          email: "אימייל",
+          location: "מיקום",
+          button: "צור קשר",
+        },
+      },
+      about: {
+        title: "אודותיי",
+        subtitle: "הכר אותי טוב יותר",
+        connectWithMe: "התחבר אליי",
+        aboutMeTitle: "אודותיי",
+        bio: "אני מפתח Full Stack נלהב עם מומחיות בטכנולוגיות אינטרנט מודרניות.",
+        experience: "ניסיון מקצועי",
+        fullstackDev: "מפתח Full Stack",
+        devExperience: "פיתוח אפליקציות אינטרנט מודרניות באמצעות React, Django וטכנולוגיות מתקדמות אחרות.",
+        managementExp: "ניסיון ניהולי",
+        managementDesc: "ניסיון נרחב בהובלת צוותים וניהול פרויקטים בתעשיות שונות.",
+        education: "חינוך ולמידה",
+        skillFactoryDesc: "תוכנית פיתוח full-stack מקיפה המכסה טכנולוגיות אינטרנט מודרניות.",
+        stepikDesc: "למידה מתמשכת דרך קורסי תכנות ותעודות שונות.",
+        technicalSkills: "סקירת כישורים טכניים",
+      },
+      projects: {
+        title: "הפרויקטים שלי",
+        subtitle: "מבחר מהעבודות והאפליקציות האחרונות שלי",
+        viewProject: "צפה בפרויקט",
+        viewCode: "צפה בקוד",
+        technologies: "טכנולוגיות",
+        noProjects: "פרויקטים יוצגו כאן לאחר הוספה.",
+        stats: {
+          totalProjects: "סך הכל פרויקטים",
+          technologies: "טכנולוגיות בשימוש",
+          completedProjects: "פרויקטים שהושלמו"
+        }
+      },
+      certificates: {
+        title: "תעודות והישגים",
+        subtitle: "התעודות המקצועיות והקורסים שהשלמתי",
+        issuer: "הונפק על ידי",
+        date: "תאריך",
+        viewCertificate: "צפה בתעודה",
+        noCertificates: "תעודות יוצגו כאן לאחר הוספה.",
+        stats: {
+          certificates: "סך הכל תעודות",
+          courses: "קורסים שהושלמו",
+          skills: "כישורים שנרכשו"
+        }
+      },
+      contact: {
+        title: "צור קשר",
+        subtitle: "יש לך פרויקט בראש? בואו נעבוד יחד כדי ליצור משהו מדהים.",
+        form: {
+          name: "שם מלא",
+          email: "כתובת אימייל",
+          subject: "נושא",
+          message: "הודעה",
+          send: "שלח הודעה",
+          sending: "שולח...",
+        },
+      },
+    },
   }
-  return context;
+
+  const t = translations[language as keyof typeof translations] || translations.en
+
+  return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>
+}
+
+export const useLanguage = (): LanguageContextType => {
+  const context = useContext(LanguageContext)
+  if (!context) {
+    throw new Error("useLanguage must be used within a LanguageProvider")
+  }
+  return context
 }
