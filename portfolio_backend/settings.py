@@ -11,21 +11,25 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(&u%e*gr(78l3sf4ss=gsu(@z%rjp@xy$203lbhyf#p=5$8=@#'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-your-secret-key-here')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'django_extensions',
 
     # Apps
     'pages',
@@ -49,6 +54,7 @@ INSTALLED_APPS = [
     'contact',
     'blog',
     'api',
+    'portfolio',
 ]
 
 MIDDLEWARE = [
@@ -173,18 +179,14 @@ REST_FRAMEWORK = {
 }
 
 # Настройка CORS
-# -----------------------------
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",      # Next.js
-    "http://127.0.0.1:3000",     # Next.js альтернативный
-    "http://localhost:5173",      # Vite (если понадобится)
-    "http://127.0.0.1:5173",     # Vite альтернативный
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 
 # Для разработки можно разрешить все origins (НЕ для продакшена!)
 CORS_ALLOW_ALL_ORIGINS = True
 
-# Разрешенные заголовки
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -197,7 +199,6 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# Разрешенные методы
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -206,3 +207,40 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+
+# Email настройки с исправлением SSL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False  # Важно: используем TLS, не SSL
+EMAIL_HOST_USER = os.getenv('GMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('GMAIL_APP_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('GMAIL_USER')
+
+# Исправление SSL проблем
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None
+
+# Создаем кастомный SSL контекст для обхода проблемы с сертификатами
+import ssl
+try:
+    # Создаем SSL контекст с менее строгой проверкой
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    
+    # Применяем к Django email
+    EMAIL_SSL_CONTEXT = ssl_context
+except Exception as e:
+    print(f"⚠️ SSL context creation failed: {e}")
+
+# Telegram настройки
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+
+# Debug информация
+if DEBUG:
+    print(f"📧 Email configured: {EMAIL_HOST_USER}")
+    print(f"📱 Telegram configured: {bool(TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID)}")
+    print(f"🔒 SSL context configured: {hasattr(locals(), 'ssl_context')}")

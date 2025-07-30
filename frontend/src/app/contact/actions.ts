@@ -11,7 +11,7 @@ export type ContactFormState = {
   }
 }
 
-// Простая валидация без zod
+// Простая валидация на фронтенде
 function validateContactForm(data: {
   name: string
   email: string
@@ -20,23 +20,19 @@ function validateContactForm(data: {
 }): { isValid: boolean; errors: ContactFormState["errors"] } {
   const errors: ContactFormState["errors"] = {}
 
-  // Валидация имени
   if (!data.name || data.name.trim().length < 2) {
     errors.name = ["Name must be at least 2 characters"]
   }
 
-  // Валидация email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!data.email || !emailRegex.test(data.email)) {
     errors.email = ["Please enter a valid email address"]
   }
 
-  // Валидация темы
   if (!data.subject || data.subject.trim().length < 5) {
     errors.subject = ["Subject must be at least 5 characters"]
   }
 
-  // Валидация сообщения
   if (!data.message || data.message.trim().length < 10) {
     errors.message = ["Message must be at least 10 characters"]
   }
@@ -48,7 +44,6 @@ function validateContactForm(data: {
 }
 
 export async function submitContactForm(prevState: ContactFormState, formData: FormData): Promise<ContactFormState> {
-  // Получаем данные из формы
   const rawData = {
     name: (formData.get("name") as string) || "",
     email: (formData.get("email") as string) || "",
@@ -56,9 +51,10 @@ export async function submitContactForm(prevState: ContactFormState, formData: F
     message: (formData.get("message") as string) || "",
   }
 
-  // Валидируем данные
-  const validation = validateContactForm(rawData)
+  console.log("📤 Submitting contact form:", rawData)
 
+  // Валидация на фронтенде
+  const validation = validateContactForm(rawData)
   if (!validation.isValid) {
     return {
       success: false,
@@ -68,20 +64,53 @@ export async function submitContactForm(prevState: ContactFormState, formData: F
   }
 
   try {
-    // Имитируем отправку email
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Отправляем на Django backend (ОБНОВЛЕННЫЙ URL!)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"
+    const response = await fetch(`${apiUrl}/api/contact-form/submit/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(rawData),
+    })
 
-    console.log("Contact form submitted:", rawData)
+    console.log("📡 Response status:", response.status)
 
-    return {
-      success: true,
-      message: "Thank you for your message! I will get back to you soon.",
+    const result = await response.json()
+    console.log("📨 Response data:", result)
+
+    if (response.ok && result.success) {
+      console.log("✅ Contact form submitted successfully:", {
+        id: result.id,
+        emailSent: result.email_sent,
+        telegramSent: result.telegram_sent,
+      })
+
+      return {
+        success: true,
+        message: result.message || "Thank you for your message! I will get back to you soon.",
+      }
+    } else {
+      // Обрабатываем ошибки валидации от Django
+      if (result.errors) {
+        return {
+          success: false,
+          errors: result.errors,
+          message: result.message || "Please fix the errors below.",
+        }
+      }
+
+      return {
+        success: false,
+        message: result.message || "Something went wrong. Please try again later.",
+      }
     }
   } catch (error) {
-    console.error("Error submitting contact form:", error)
+    console.error("❌ Network error submitting contact form:", error)
     return {
       success: false,
-      message: "Something went wrong. Please try again later.",
+      message: "Network error. Please check your connection and try again.",
     }
   }
 }

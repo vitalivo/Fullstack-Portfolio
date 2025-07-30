@@ -5,18 +5,13 @@ from .models import ContactMessage
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'subject', 'created_at']
-    list_filter = ['created_at']
+    list_display = ['name', 'email', 'subject', 'created_at', 'is_read']
+    list_filter = ['is_read', 'created_at']
     search_fields = ['name', 'email', 'subject']
-    readonly_fields = ['created_at']
-    date_hierarchy = 'created_at'
+    readonly_fields = ['created_at', 'ip_address']
     
-    fieldsets = (
-        ('Информация о сообщении', {
-            'fields': ('name', 'email', 'subject', 'message')
-        }),
-        ('Системная информация', {
-            'fields': ('created_at',),
-            'classes': ('collapse',)
-        })
-    )
+    def mark_as_read(self, request, queryset):
+        queryset.update(is_read=True)
+    mark_as_read.short_description = "Mark as read"
+    
+    actions = [mark_as_read]

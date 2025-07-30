@@ -1,4 +1,3 @@
-// src/contexts/LanguageContext.tsx
 "use client"
 
 import type React from "react"
@@ -17,17 +16,23 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const translations = {
     en: {
+      // Common
       common: {
         loading: "Loading...",
         error: "Error loading data",
       },
+
+      // Navigation
       nav: {
         home: "Home",
-        about: "About", 
+        about: "About",
         projects: "Projects",
         certificates: "Certificates",
+        resume: "Resume",
         contact: "Contact",
       },
+
+      // Home page
       home: {
         hero: {
           title: "Full Stack Developer",
@@ -50,13 +55,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             link: "View Projects",
           },
           certificates: {
-            title: "Certificates", 
+            title: "Certificates",
             description: "Professional certifications and completed courses",
             link: "View Certificates",
           },
           about: {
             title: "About Me",
-            description: "Learn more about my background and experience", 
+            description: "Learn more about my background and experience",
             link: "Learn More",
           },
         },
@@ -68,35 +73,41 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           button: "Get In Touch",
         },
       },
+
+      // About page
       about: {
         title: "About Me",
         subtitle: "Get to know me better",
         connectWithMe: "Connect With Me",
         aboutMeTitle: "About Me",
-        bio: "I'm a passionate Full Stack Developer with expertise in modern web technologies.",
+        bio: "I'm a passionate Full Stack Developer with expertise in modern web technologies. I love creating innovative solutions and bringing ideas to life through code.",
         experience: "Professional Experience",
-        fullstackDev: "Full Stack Developer", 
+        fullstackDev: "Full Stack Developer",
         devExperience: "Developing modern web applications using React, Django, and other cutting-edge technologies.",
         managementExp: "Management Experience",
-        managementDesc: "Extensive experience in team leadership and project management.",
+        managementDesc: "Extensive experience in team leadership and project management across various industries.",
         education: "Education & Learning",
         skillFactoryDesc: "Comprehensive full-stack development program covering modern web technologies.",
         stepikDesc: "Continuous learning through various programming courses and certifications.",
         technicalSkills: "Technical Skills Overview",
       },
+
+      // Projects page
       projects: {
         title: "My Projects",
         subtitle: "A showcase of my recent work and applications",
         viewProject: "View Project",
-        viewCode: "View Code", 
+        viewCode: "View Code",
         technologies: "Technologies",
         noProjects: "Projects will be displayed here once added.",
         stats: {
-          totalProjects: "Total Projects",
+          total: "Total Projects",
           technologies: "Technologies Used",
-          completedProjects: "Completed Projects"
-        }
+          inProgress: "In Progress",
+        },
       },
+
+      // Certificates page
       certificates: {
         title: "Certificates & Achievements",
         subtitle: "My professional certifications and completed courses",
@@ -105,17 +116,46 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         viewCertificate: "View Certificate",
         noCertificates: "Certificates will be displayed here once added.",
         stats: {
-          certificates: "Total Certificates",
-          courses: "Courses Completed",
-          skills: "Skills Acquired"
-        }
+          total: "Total Certificates",
+          platforms: "Learning Platforms",
+          hours: "Study Hours",
+        },
       },
+
+      // Resume page
+      resume: {
+        title: "Resume & CV",
+        subtitle: "Download my professional resume tailored for different positions",
+        chooseVersion: "Choose Version",
+        downloadPdf: "Download PDF",
+        downloading: "Downloading...",
+        atsOptimized: "PDF format • Optimized for ATS systems",
+        noSelected: "No Resume Selected",
+        chooseTemplate: "Choose a resume template from the left to preview",
+        whyDownload: "Why Download My Resume?",
+        features: {
+          ats: {
+            title: "ATS Optimized",
+            description: "Formatted to pass through Applicant Tracking Systems",
+          },
+          updated: {
+            title: "Always Updated",
+            description: "Latest projects and skills automatically included",
+          },
+          specific: {
+            title: "Role Specific",
+            description: "Tailored versions for different positions",
+          },
+        },
+      },
+
+      // Contact page
       contact: {
         title: "Get In Touch",
         subtitle: "Have a project in mind? Let's work together to create something amazing.",
         form: {
           name: "Full Name",
-          email: "Email Address", 
+          email: "Email Address",
           subject: "Subject",
           message: "Message",
           send: "Send Message",
@@ -123,18 +163,25 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         },
       },
     },
+
     ru: {
+      // Common
       common: {
         loading: "Загрузка...",
         error: "Ошибка загрузки данных",
       },
+
+      // Navigation
       nav: {
         home: "Главная",
         about: "Обо мне",
-        projects: "Проекты", 
+        projects: "Проекты",
         certificates: "Сертификаты",
+        resume: "Резюме",
         contact: "Контакты",
       },
+
+      // Home page
       home: {
         hero: {
           title: "Full Stack Разработчик",
@@ -158,7 +205,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           },
           certificates: {
             title: "Сертификаты",
-            description: "Профессиональные сертификаты и пройденные курсы", 
+            description: "Профессиональные сертификаты и пройденные курсы",
             link: "Посмотреть Сертификаты",
           },
           about: {
@@ -175,15 +222,18 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           button: "Связаться",
         },
       },
+
+      // About page
       about: {
         title: "Обо Мне",
         subtitle: "Узнайте меня лучше",
         connectWithMe: "Связаться со Мной",
-        aboutMeTitle: "Обо Мне", 
-        bio: "Я увлеченный Full Stack разработчик с экспертизой в современных веб-технологиях.",
+        aboutMeTitle: "Обо Мне",
+        bio: "Я увлеченный Full Stack разработчик с экспертизой в современных веб-технологиях. Люблю создавать инновационные решения и воплощать идеи в жизнь через код.",
         experience: "Профессиональный Опыт",
         fullstackDev: "Full Stack Разработчик",
-        devExperience: "Разработка современных веб-приложений с использованием React, Django и других передовых технологий.",
+        devExperience:
+          "Разработка современных веб-приложений с использованием React, Django и других передовых технологий.",
         managementExp: "Управленческий Опыт",
         managementDesc: "Обширный опыт руководства командой и управления проектами в различных отраслях.",
         education: "Образование и Обучение",
@@ -191,6 +241,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         stepikDesc: "Непрерывное обучение через различные курсы программирования и сертификации.",
         technicalSkills: "Обзор Технических Навыков",
       },
+
+      // Projects page
       projects: {
         title: "Мои Проекты",
         subtitle: "Витрина моих последних работ и приложений",
@@ -199,11 +251,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         technologies: "Технологии",
         noProjects: "Проекты будут отображены здесь после добавления.",
         stats: {
-          totalProjects: "Всего Проектов",
+          total: "Всего Проектов",
           technologies: "Использованных Технологий",
-          completedProjects: "Завершенных Проектов"
-        }
+          inProgress: "В Разработке",
+        },
       },
+
+      // Certificates page
       certificates: {
         title: "Сертификаты и Достижения",
         subtitle: "Мои профессиональные сертификаты и пройденные курсы",
@@ -212,36 +266,72 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         viewCertificate: "Посмотреть Сертификат",
         noCertificates: "Сертификаты будут отображены здесь после добавления.",
         stats: {
-          certificates: "Всего Сертификатов",
-          courses: "Пройденных Курсов",
-          skills: "Освоенных Навыков"
-        }
+          total: "Всего Сертификатов",
+          platforms: "Платформ Обучения",
+          hours: "Часов Изучения",
+        },
       },
+
+      // Resume page
+      resume: {
+        title: "Резюме и CV",
+        subtitle: "Скачайте мое профессиональное резюме, адаптированное для разных позиций",
+        chooseVersion: "Выберите Версию",
+        downloadPdf: "Скачать PDF",
+        downloading: "Скачивание...",
+        atsOptimized: "PDF формат • Оптимизировано для ATS систем",
+        noSelected: "Резюме Не Выбрано",
+        chooseTemplate: "Выберите шаблон резюме слева для предпросмотра",
+        whyDownload: "Почему Стоит Скачать Мое Резюме?",
+        features: {
+          ats: {
+            title: "ATS Оптимизировано",
+            description: "Отформатировано для прохождения через системы отслеживания кандидатов",
+          },
+          updated: {
+            title: "Всегда Актуально",
+            description: "Последние проекты и навыки автоматически включены",
+          },
+          specific: {
+            title: "Под Конкретную Роль",
+            description: "Адаптированные версии для разных позиций",
+          },
+        },
+      },
+
+      // Contact page
       contact: {
         title: "Свяжитесь со Мной",
         subtitle: "Есть проект? Давайте работать вместе, чтобы создать что-то удивительное.",
         form: {
           name: "Полное Имя",
           email: "Email Адрес",
-          subject: "Тема", 
+          subject: "Тема",
           message: "Сообщение",
           send: "Отправить Сообщение",
           sending: "Отправка...",
         },
       },
     },
+
     he: {
+      // Common
       common: {
         loading: "טוען...",
         error: "שגיאה בטעינת הנתונים",
       },
+
+      // Navigation
       nav: {
         home: "בית",
         about: "אודות",
         projects: "פרויקטים",
         certificates: "תעודות",
+        resume: "קורות חיים",
         contact: "צור קשר",
       },
+
+      // Home page
       home: {
         hero: {
           title: "מפתח Full Stack",
@@ -282,12 +372,14 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           button: "צור קשר",
         },
       },
+
+      // About page
       about: {
         title: "אודותיי",
         subtitle: "הכר אותי טוב יותר",
         connectWithMe: "התחבר אליי",
         aboutMeTitle: "אודותיי",
-        bio: "אני מפתח Full Stack נלהב עם מומחיות בטכנולוגיות אינטרנט מודרניות.",
+        bio: "אני מפתח Full Stack נלהב עם מומחיות בטכנולוגיות אינטרנט מודרניות. אני אוהב ליצור פתרונות חדשניים ולהביא רעיונות לחיים דרך קוד.",
         experience: "ניסיון מקצועי",
         fullstackDev: "מפתח Full Stack",
         devExperience: "פיתוח אפליקציות אינטרנט מודרניות באמצעות React, Django וטכנולוגיות מתקדמות אחרות.",
@@ -298,6 +390,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         stepikDesc: "למידה מתמשכת דרך קורסי תכנות ותעודות שונות.",
         technicalSkills: "סקירת כישורים טכניים",
       },
+
+      // Projects page
       projects: {
         title: "הפרויקטים שלי",
         subtitle: "מבחר מהעבודות והאפליקציות האחרונות שלי",
@@ -306,11 +400,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         technologies: "טכנולוגיות",
         noProjects: "פרויקטים יוצגו כאן לאחר הוספה.",
         stats: {
-          totalProjects: "סך הכל פרויקטים",
+          total: "סך הכל פרויקטים",
           technologies: "טכנולוגיות בשימוש",
-          completedProjects: "פרויקטים שהושלמו"
-        }
+          inProgress: "בפיתוח",
+        },
       },
+
+      // Certificates page
       certificates: {
         title: "תעודות והישגים",
         subtitle: "התעודות המקצועיות והקורסים שהשלמתי",
@@ -319,11 +415,40 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         viewCertificate: "צפה בתעודה",
         noCertificates: "תעודות יוצגו כאן לאחר הוספה.",
         stats: {
-          certificates: "סך הכל תעודות",
-          courses: "קורסים שהושלמו",
-          skills: "כישורים שנרכשו"
-        }
+          total: "סך הכל תעודות",
+          platforms: "פלטפורמות למידה",
+          hours: "שעות לימוד",
+        },
       },
+
+      // Resume page
+      resume: {
+        title: "קורות חיים ו-CV",
+        subtitle: "הורד את קורות החיים המקצועיים שלי המותאמים לתפקידים שונים",
+        chooseVersion: "בחר גרסה",
+        downloadPdf: "הורד PDF",
+        downloading: "מוריד...",
+        atsOptimized: "פורמט PDF • מותאם למערכות ATS",
+        noSelected: "לא נבחרו קורות חיים",
+        chooseTemplate: "בחר תבנית קורות חיים משמאל לתצוגה מקדימה",
+        whyDownload: "למה להוריד את קורות החיים שלי?",
+        features: {
+          ats: {
+            title: "מותאם ל-ATS",
+            description: "מעוצב לעבור דרך מערכות מעקב מועמדים",
+          },
+          updated: {
+            title: "תמיד מעודכן",
+            description: "הפרויקטים והכישורים האחרונים נכללים אוטומטית",
+          },
+          specific: {
+            title: "ספציפי לתפקיד",
+            description: "גרסאות מותאמות לתפקידים שונים",
+          },
+        },
+      },
+
+      // Contact page
       contact: {
         title: "צור קשר",
         subtitle: "יש לך פרויקט בראש? בואו נעבוד יחד כדי ליצור משהו מדהים.",
